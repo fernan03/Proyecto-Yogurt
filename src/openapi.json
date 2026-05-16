@@ -1,0 +1,1254 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "OpenAPI definition",
+        "version": "v0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8082",
+            "description": "Generated server url"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Monitoring",
+            "description": "Monitoreo y métricas del proceso de yogurt"
+        },
+        {
+            "name": "Recipes",
+            "description": "Gestión de recetas de yogurt"
+        },
+        {
+            "name": "Yogurt Batch",
+            "description": "Gestion del proceso de produccion de yogurt"
+        }
+    ],
+    "paths": {
+        "/api/recipes/{id}": {
+            "get": {
+                "tags": [
+                    "Recipes"
+                ],
+                "summary": "Obtener receta",
+                "description": "Obtiene una receta por su ID",
+                "operationId": "getRecipe",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la receta",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Receta no encontrada",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Recipe"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Receta encontrada",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Recipe"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Recipes"
+                ],
+                "summary": "Actualizar receta",
+                "description": "Actualiza una receta existente por ID",
+                "operationId": "updateRecipe",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la receta",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": 1
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Recipe"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Receta actualizada",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Recipe"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Receta no encontrada",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Recipe"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/recipes": {
+            "get": {
+                "tags": [
+                    "Recipes"
+                ],
+                "summary": "Listar recetas activas",
+                "description": "Obtiene todas las recetas activas",
+                "operationId": "getAllRecipes",
+                "responses": {
+                    "200": {
+                        "description": "Lista obtenida",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Recipe"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Recipes"
+                ],
+                "summary": "Crear receta",
+                "description": "Crea una nueva receta de yogurt",
+                "operationId": "createRecipe",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Recipe"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Receta creada correctamente",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Recipe"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Datos inválidos",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Recipe"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/batches": {
+            "get": {
+                "tags": [
+                    "Yogurt Batch"
+                ],
+                "summary": "Obtener todos los lotes",
+                "description": "Obtiene una lista de todos los lotes",
+                "operationId": "getAllBatches",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "PREPARING",
+                                "HEATING",
+                                "COOLING",
+                                "INOCULATING",
+                                "INCUBATING",
+                                "REFRIGERATING",
+                                "COMPLETED",
+                                "FAILED"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de lotes obtenida exitosamente",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/YogurtBatch"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "No se encontraron lotes",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/YogurtBatch"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Yogurt Batch"
+                ],
+                "summary": "Crear nuevo lote",
+                "description": "Inicia un nuevo proceso de produccion de yogurt",
+                "operationId": "startNewBatch",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StartBatchRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "201": {
+                        "description": "Lote creado exitosamente",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/YogurtBatch"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Datos invalidos",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/YogurtBatch"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/batches/{bathId}/temperature": {
+            "post": {
+                "tags": [
+                    "Yogurt Batch"
+                ],
+                "summary": "Registrar temperatura",
+                "description": "Registra una medicion de temperatura en el lote",
+                "operationId": "recordTemEntity",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/TemperatureRecord"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "404": {
+                        "description": "Lote no encontrado"
+                    },
+                    "200": {
+                        "description": "Temperatura registrada"
+                    }
+                }
+            }
+        },
+        "/api/batches/{batchid}/fail": {
+            "post": {
+                "tags": [
+                    "Yogurt Batch"
+                ],
+                "summary": "Marcar lote como fallido",
+                "description": "Marca el lote como fallido con una razon",
+                "operationId": "markAsFailed",
+                "parameters": [],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/FailRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "404": {
+                        "description": "Lote no encontrado",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/YogurtBatch"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Lote marcado como fallido",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/YogurtBatch"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/batches/{batchId}/refrigeration": {
+            "post": {
+                "tags": [
+                    "Yogurt Batch"
+                ],
+                "summary": "Iniciar refrigeracion",
+                "description": "Enfria el lote para finalizar el proceso",
+                "operationId": "startRefrigeration",
+                "parameters": [
+                    {
+                        "name": "batchId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Lote no encontrado",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/YogurtBatch"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Refrigeracion iniciada exitosamente",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/YogurtBatch"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/batches/{batchId}/inoculating": {
+            "post": {
+                "tags": [
+                    "Yogurt Batch"
+                ],
+                "summary": "Iniciar inoculación",
+                "description": "Agrega el cultivo al lote",
+                "operationId": "startInoculating",
+                "parameters": [
+                    {
+                        "name": "batchId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Inoculacion iniciada exitosamente",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/YogurtBatch"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Lote no encontrado",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/YogurtBatch"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/batches/{batchId}/incubation": {
+            "post": {
+                "tags": [
+                    "Yogurt Batch"
+                ],
+                "summary": "Iniciar incubación",
+                "description": "Comienza la fase de incubacion del yougrt",
+                "operationId": "starIncubation",
+                "parameters": [
+                    {
+                        "name": "batchId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Lote no encontrado",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/YogurtBatch"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Incubacion iniciada exitosamente",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/YogurtBatch"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/batches/{batchId}/heating": {
+            "post": {
+                "tags": [
+                    "Yogurt Batch"
+                ],
+                "summary": "Iniciar calentamiento",
+                "description": "Inicia la fase de calentamiento del lote",
+                "operationId": "startHeating",
+                "parameters": [
+                    {
+                        "name": "batchId",
+                        "in": "path",
+                        "description": "ID del lote",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Calentamiento iniciado exitosamente",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/YogurtBatch"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Lote no encontrado",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/YogurtBatch"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/batches/{batchId}/complete": {
+            "post": {
+                "tags": [
+                    "Yogurt Batch"
+                ],
+                "summary": "Completar lote",
+                "description": "Marca el lote como finalizado",
+                "operationId": "completeBatch",
+                "parameters": [
+                    {
+                        "name": "batchId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lote completado exitosamente",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/YogurtBatch"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Lote no encontrado",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/YogurtBatch"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/recipes/{id}/deactivate": {
+            "patch": {
+                "tags": [
+                    "Recipes"
+                ],
+                "summary": "Desactivar receta",
+                "description": "Desactiva una receta (soft delete)",
+                "operationId": "deactivateRecipe",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la receta",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Receta desactivada"
+                    }
+                }
+            }
+        },
+        "/api/recipes/{id}/activate": {
+            "patch": {
+                "tags": [
+                    "Recipes"
+                ],
+                "summary": "Activar receta",
+                "description": "Activa una receta previamente desactivada",
+                "operationId": "activateRecipe",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de la receta",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Receta activada"
+                    }
+                }
+            }
+        },
+        "/api/recipes/search": {
+            "get": {
+                "tags": [
+                    "Recipes"
+                ],
+                "summary": "Buscar recetas",
+                "description": "Busca recetas por palabra clave",
+                "operationId": "searchRecipe",
+                "parameters": [
+                    {
+                        "name": "keyword",
+                        "in": "query",
+                        "description": "Palabra clave de búsqueda",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "example": "natural"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Resultados encontrados",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Recipe"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Parámetro inválido",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Recipe"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/monitoring/dashboard": {
+            "get": {
+                "tags": [
+                    "Monitoring"
+                ],
+                "summary": "Dashboard general",
+                "description": "Obtiene métricas generales del sistema (conteos, activos, completados hoy)",
+                "operationId": "getDashboard",
+                "responses": {
+                    "200": {
+                        "description": "Dashboard obtenido",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Dashboard"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/monitoring/batches/{batchId}/temperature": {
+            "get": {
+                "tags": [
+                    "Monitoring"
+                ],
+                "summary": "Resumen de temperatura",
+                "description": "Obtiene estadísticas de temperatura de un lote",
+                "operationId": "getBatchTemperatureSummary",
+                "parameters": [
+                    {
+                        "name": "batchId",
+                        "in": "path",
+                        "description": "ID del lote",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": 1
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Resumen obtenido",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TemperatureSummary"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Lote no encontrado",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TemperatureSummary"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/monitoring/batches/{batchId}/temperature-logs": {
+            "get": {
+                "tags": [
+                    "Monitoring"
+                ],
+                "summary": "Historial de temperaturas",
+                "description": "Obtiene registros de temperatura de un lote, opcionalmente filtrados por rango de fechas",
+                "operationId": "getTemperatureLogs",
+                "parameters": [
+                    {
+                        "name": "batchId",
+                        "in": "path",
+                        "description": "ID del lote",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": 1
+                    },
+                    {
+                        "name": "start",
+                        "in": "query",
+                        "description": "Fecha inicio (ISO 8601)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "example": "2026-04-27T10:00:00"
+                    },
+                    {
+                        "name": "end",
+                        "in": "query",
+                        "description": "Fecha fin (ISO 8601)",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        },
+                        "example": "2026-04-27T12:00:00"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de registros obtenida",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TemperatureLog"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/monitoring/batches/active": {
+            "get": {
+                "tags": [
+                    "Monitoring"
+                ],
+                "summary": "Obtener lotes activos",
+                "description": "Lista todos los lotes en proceso (no finalizados)",
+                "operationId": "getActiveBatches",
+                "responses": {
+                    "200": {
+                        "description": "Lista de lotes activos obtenida",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/YogurtBatch"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/batches/{batchId}": {
+            "get": {
+                "tags": [
+                    "Yogurt Batch"
+                ],
+                "summary": "Obtener lote por ID",
+                "description": "Obtiene un lote por su ID",
+                "operationId": "getBatch",
+                "parameters": [
+                    {
+                        "name": "batchId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "Lote no encontrado",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/YogurtBatch"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Lote obtenido exitosamente",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/YogurtBatch"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Ingredient": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Nombre del ingrediente",
+                        "example": "Leche entera"
+                    },
+                    "quantity": {
+                        "type": "number",
+                        "description": "Cantidad del ingrediente",
+                        "format": "double",
+                        "example": 1.0
+                    },
+                    "unit": {
+                        "type": "string",
+                        "description": "Unidad de medida",
+                        "example": "litros"
+                    },
+                    "notes": {
+                        "type": "string",
+                        "description": "Notas adicionales sobre el ingrediente",
+                        "example": "Preferiblemente fresca"
+                    },
+                    "options": {
+                        "type": "boolean",
+                        "description": "Indica si el ingrediente es opcional",
+                        "example": false
+                    }
+                },
+                "description": "Ingrediente utilizado en una receta de yogurt"
+            },
+            "Recipe": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "description": "Nombre de la receta",
+                        "example": "Yogurt natural clásico"
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "Descripción de la receta",
+                        "example": "Receta tradicional de yogurt casero"
+                    },
+                    "defaulMilkVolume": {
+                        "type": "number",
+                        "description": "Volumen de leche en litros",
+                        "format": "double",
+                        "example": 1.0
+                    },
+                    "defaulStarterAmount": {
+                        "type": "number",
+                        "description": "Cantidad de cultivo iniciador (starter) en gramos",
+                        "format": "double",
+                        "example": 50.0
+                    },
+                    "heatingTemperature": {
+                        "type": "number",
+                        "description": "Temperatura de calentamiento en °C",
+                        "format": "double",
+                        "example": 85.0
+                    },
+                    "heatingDuration": {
+                        "type": "integer",
+                        "description": "Duración del calentamiento en minutos",
+                        "format": "int32",
+                        "example": 30
+                    },
+                    "innoculationTemperature": {
+                        "type": "number",
+                        "description": "Temperatura de inoculación en °C",
+                        "format": "double",
+                        "example": 43.0
+                    },
+                    "incubationTemperature": {
+                        "type": "number",
+                        "description": "Temperatura de incubación en °C",
+                        "format": "double",
+                        "example": 42.0
+                    },
+                    "minIncubationTime": {
+                        "type": "integer",
+                        "description": "Tiempo mínimo de incubación en minutos",
+                        "format": "int32",
+                        "example": 240
+                    },
+                    "maxIncubationTime": {
+                        "type": "integer",
+                        "description": "Tiempo máximo de incubación en minutos",
+                        "format": "int32",
+                        "example": 480
+                    },
+                    "refrigerationTime": {
+                        "type": "integer",
+                        "description": "Tiempo de refrigeración en minutos",
+                        "format": "int32",
+                        "example": 180
+                    },
+                    "difficulty": {
+                        "type": "string",
+                        "description": "Nivel de dificultad de la receta",
+                        "example": "BEGINNER",
+                        "enum": [
+                            "BEGINNER",
+                            "INTERMEDIATE",
+                            "ADVANCED"
+                        ]
+                    },
+                    "tips": {
+                        "type": "string",
+                        "description": "Consejos adicionales",
+                        "example": "Mantener temperatura constante durante la incubación"
+                    },
+                    "ingredients": {
+                        "type": "array",
+                        "description": "Lista de ingredientes de la receta",
+                        "items": {
+                            "$ref": "#/components/schemas/Ingredient"
+                        }
+                    }
+                },
+                "description": "DTO para la creación y actualización de recetas de yogurt"
+            },
+            "StartBatchRequest": {
+                "required": [
+                    "recipeId"
+                ],
+                "type": "object",
+                "properties": {
+                    "recipeId": {
+                        "type": "integer",
+                        "description": "ID de la receta a utilizar",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "customMilkVolume": {
+                        "type": "number",
+                        "description": "Volumen personalizado de leche en litros (opcional)",
+                        "format": "double",
+                        "example": 2.0
+                    },
+                    "customStarterAmonunt": {
+                        "type": "number",
+                        "description": "Cantidad personalizada de cultivo iniciador en gramos (opcional)",
+                        "format": "double",
+                        "example": 100.0
+                    }
+                },
+                "description": "Solicitud para iniciar un nuevo lote de yogurt"
+            },
+            "TemperatureLog": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "batch": {
+                        "$ref": "#/components/schemas/YogurtBatch"
+                    },
+                    "temperature": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "recordedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "type": {
+                        "type": "string",
+                        "enum": [
+                            "HEATING",
+                            "COOLING",
+                            "INCUBATION",
+                            "REFRIGERATION",
+                            "MANUAL"
+                        ]
+                    },
+                    "notes": {
+                        "type": "string"
+                    }
+                }
+            },
+            "YogurtBatch": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "batchCode": {
+                        "type": "string"
+                    },
+                    "recipe": {
+                        "$ref": "#/components/schemas/Recipe"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "PREPARING",
+                            "HEATING",
+                            "COOLING",
+                            "INOCULATING",
+                            "INCUBATING",
+                            "REFRIGERATING",
+                            "COMPLETED",
+                            "FAILED"
+                        ]
+                    },
+                    "milkVolume": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "starterAmount": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "targetTemperature": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "incubationTime": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "startTime": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "incubationStartTime": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "incubationEndTime": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "refrigerationStartTime": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "temperatureLogs": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/TemperatureLog"
+                        }
+                    },
+                    "notes": {
+                        "type": "string"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "TemperatureRecord": {
+                "required": [
+                    "temperature"
+                ],
+                "type": "object",
+                "properties": {
+                    "temperature": {
+                        "type": "number",
+                        "description": "Temperatura registrada en °C",
+                        "format": "double",
+                        "example": 42.5
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "Tipo de registro de temperatura",
+                        "example": "INCUBATION",
+                        "enum": [
+                            "HEATING",
+                            "COOLING",
+                            "INCUBATION",
+                            "REFRIGERATION",
+                            "MANUAL",
+                            "HEATING",
+                            "COOLING",
+                            "INCUBATION",
+                            "REFRIGERATION",
+                            "MANUAL"
+                        ]
+                    }
+                },
+                "description": "Registro de temperatura para un lote de yogurt"
+            },
+            "FailRequest": {
+                "type": "object",
+                "properties": {
+                    "reason": {
+                        "type": "string",
+                        "description": "Razón del fallo del lote",
+                        "example": "Temperatura fuera de rango"
+                    }
+                },
+                "description": "Motivo por el cual un lote fue marcado como fallido"
+            },
+            "Dashboard": {
+                "type": "object",
+                "properties": {
+                    "batchCounts": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "integer",
+                            "description": "Cantidad de lotes por estado",
+                            "format": "int64"
+                        },
+                        "description": "Cantidad de lotes por estado",
+                        "example": {
+                            "PREPARING": 2,
+                            "HEATING": 1,
+                            "COOLING": 0,
+                            "INCUBATING": 3,
+                            "REFRIGERATING": 1,
+                            "COMPLETED": 5,
+                            "FAILED": 1
+                        }
+                    },
+                    "activeBatchCount": {
+                        "type": "integer",
+                        "description": "Cantidad total de lotes activos",
+                        "format": "int64",
+                        "example": 7
+                    },
+                    "completedToday": {
+                        "type": "integer",
+                        "description": "Cantidad de lotes completados hoy",
+                        "format": "int32",
+                        "example": 3
+                    }
+                },
+                "description": "Resumen general del sistema de producción de yogurt"
+            },
+            "TemperatureSummary": {
+                "type": "object",
+                "properties": {
+                    "currentTemperature": {
+                        "type": "number",
+                        "description": "Temperatura actual del lote en °C",
+                        "format": "double",
+                        "example": 42.5
+                    },
+                    "maximunTemperature": {
+                        "type": "number",
+                        "description": "Temperatura máxima registrada en °C",
+                        "format": "double",
+                        "example": 45.0
+                    },
+                    "minmumTemperature": {
+                        "type": "number",
+                        "description": "Temperatura mínima registrada en °C",
+                        "format": "double",
+                        "example": 38.5
+                    },
+                    "averageTemperature": {
+                        "type": "number",
+                        "description": "Temperatura promedio durante la incubación en °C",
+                        "format": "double",
+                        "example": 42.0
+                    }
+                },
+                "description": "Resumen de estadísticas de temperatura de un lote"
+            }
+        }
+    }
+}
